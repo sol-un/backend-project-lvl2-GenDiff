@@ -1,5 +1,19 @@
-extends: airbnb-base
+
+---
+
+plugins:
+  # https://github.com/jest-community/eslint-plugin-jest
+  - jest
+
+# https://eslint.org/docs/user-guide/configuring#specifying-environments
+env:
+  node: true
+
+extends:
+  - 'airbnb-base'
+  - 'plugin:jest/recommended'
 
 rules:
-    no-console: 0
-    no-restricted-syntax: 0
+  no-console: 0
+  import/extensions: 0
+  no-restricted-syntax: 0
