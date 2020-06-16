@@ -1,2 +1,3 @@
-import genDiff from 'src/comparator.js');
+import genDiff from './src/comparator';
+
 export default genDiff;

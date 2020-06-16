@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/sol-un/backend-project-lvl2#readme",
   "dependencies": {
+    "@jest/globals": "^26.0.1",
     "commander": "^5.1.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.21.2",

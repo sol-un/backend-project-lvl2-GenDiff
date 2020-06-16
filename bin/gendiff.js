@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import program from 'commander';
-import compareFiles from '../src/comparator.js';
+import compareFiles from '../src/comparator';
 
 program
   .version('1.0.0', '-V, --version', 'output the version number')

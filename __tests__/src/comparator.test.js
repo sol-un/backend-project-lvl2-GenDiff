@@ -1,6 +1,7 @@
+import { test, expect } from '@jest/globals';
 import path from 'path';
 import fs from 'fs';
-import compareFiles from '../../src/comparator.js';
+import compareFiles from '../../src/comparator';
 
 test('Gendiff', () => {
   const before = path.join(__dirname, '..', '..', '__fixtures__', 'before.json');
