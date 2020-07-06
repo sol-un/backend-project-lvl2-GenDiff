@@ -1,13 +1,57 @@
 import { test, expect } from '@jest/globals';
 import path from 'path';
 import fs from 'fs';
-import compareFiles from '../../src/comparator.js';
+import genDiff from '../../src/gendiff.js';
 
-test('Gendiff', () => {
-  const currentDir = process.cwd();
-  const before = path.resolve(currentDir, '__fixtures__', 'before.json');
-  const after = path.resolve(currentDir, '__fixtures__', 'after.json');
-  const resultPath = path.resolve(currentDir, '__fixtures__', 'result.txt');
-  const result = fs.readFileSync(resultPath, 'utf8');
-  expect(compareFiles(before, after)).toBe(result);
+let currentDir;
+beforeAll(() => {
+  currentDir = process.cwd();
+});
+
+test('Gendiff JSON', () => {
+  const pathTobefore = path.resolve(currentDir, '__fixtures__', 'json', 'before.json');
+  const pathToafter = path.resolve(currentDir, '__fixtures__', 'json', 'after.json');
+
+  const pathToExpectedJson = path.resolve(currentDir, '__fixtures__', 'expected', 'json.txt');
+  const expectedJson = fs.readFileSync(pathToExpectedJson, 'utf8');
+  const pathToExpectedPlain = path.resolve(currentDir, '__fixtures__', 'expected', 'plain.txt');
+  const expectedPlain = fs.readFileSync(pathToExpectedPlain, 'utf8');
+  const pathToExpectedStylish = path.resolve(currentDir, '__fixtures__', 'expected', 'stylish.txt');
+  const expectedStylish = fs.readFileSync(pathToExpectedStylish, 'utf8');
+
+  expect(`${genDiff(pathTobefore, pathToafter, 'json')}\n`).toBe(expectedJson);
+  expect(genDiff(pathTobefore, pathToafter, 'plain')).toBe(expectedPlain);
+  expect(`${genDiff(pathTobefore, pathToafter, 'stylish')}\n`).toBe(expectedStylish);
+});
+
+test('Gendiff YAML', () => {
+  const pathTobefore = path.resolve(currentDir, '__fixtures__', 'yaml', 'before.yml');
+  const pathToafter = path.resolve(currentDir, '__fixtures__', 'yaml', 'after.yml');
+
+  const pathToExpectedJson = path.resolve(currentDir, '__fixtures__', 'expected', 'json.txt');
+  const expectedJson = fs.readFileSync(pathToExpectedJson, 'utf8');
+  const pathToExpectedPlain = path.resolve(currentDir, '__fixtures__', 'expected', 'plain.txt');
+  const expectedPlain = fs.readFileSync(pathToExpectedPlain, 'utf8');
+  const pathToExpectedStylish = path.resolve(currentDir, '__fixtures__', 'expected', 'stylish.txt');
+  const expectedStylish = fs.readFileSync(pathToExpectedStylish, 'utf8');
+
+  expect(`${genDiff(pathTobefore, pathToafter, 'json')}\n`).toBe(expectedJson);
+  expect(genDiff(pathTobefore, pathToafter, 'plain')).toBe(expectedPlain);
+  expect(`${genDiff(pathTobefore, pathToafter, 'stylish')}\n`).toBe(expectedStylish);
+});
+
+test('Gendiff INI', () => {
+  const pathTobefore = path.resolve(currentDir, '__fixtures__', 'ini', 'before.ini');
+  const pathToafter = path.resolve(currentDir, '__fixtures__', 'ini', 'after.ini');
+
+  const pathToExpectedJson = path.resolve(currentDir, '__fixtures__', 'expected', 'json.txt');
+  const expectedJson = fs.readFileSync(pathToExpectedJson, 'utf8');
+  const pathToExpectedPlain = path.resolve(currentDir, '__fixtures__', 'expected', 'plain.txt');
+  const expectedPlain = fs.readFileSync(pathToExpectedPlain, 'utf8');
+  const pathToExpectedStylish = path.resolve(currentDir, '__fixtures__', 'expected', 'stylish.txt');
+  const expectedStylish = fs.readFileSync(pathToExpectedStylish, 'utf8');
+
+  // expect(`${genDiff(pathTobefore, pathToafter, 'json')}\n`).toBe(expectedJson);
+  expect(genDiff(pathTobefore, pathToafter, 'plain')).toBe(expectedPlain);
+  expect(`${genDiff(pathTobefore, pathToafter, 'stylish')}\n`).toBe(expectedStylish);
 });

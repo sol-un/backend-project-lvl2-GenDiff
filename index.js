@@ -1,3 +1,3 @@
-import genDiff from './src/comparator';
+import genDiff from './src/gendiff';
 
 export default genDiff;

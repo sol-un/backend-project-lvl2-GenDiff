@@ -1,21 +1,21 @@
 install: install-deps
 
 run:
-	bin/nodejs-package.js 10
+	@bin/nodejs-package.js 10
 
 install-deps:
-	npm ci
+	@npm ci
 
 test:
-	npm test
+	@npm test
 
 test-coverage:
-	npm test -- --coverage --coverageProvider=v8
+	@npm test -- --coverage --coverageProvider=v8
 
 lint:
-	npx eslint .
+	@npx eslint .
 
 publish:
-	npm publish
+	@npm publish
 
 .PHONY: test
