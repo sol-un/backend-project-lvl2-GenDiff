@@ -38,16 +38,21 @@ const genDiff = (filepath1, filepath2, format) => {
   const data1 = parse(filepath1);
   const data2 = parse(filepath2);
   const ast = build(data1, data2);
+  let render;
   switch (format) {
     case 'stylish':
-      return renderStylish(ast);
+      render = (arg) => renderStylish(arg);
+      break;
     case 'plain':
-      return renderPlain(ast);
+      render = (arg) => renderPlain(arg);
+      break;
     case 'json':
-      return JSON.stringify(ast);
+      render = (arg) => JSON.stringify(arg);
+      break;
     default:
       console.log('Unknown output format');
   }
+  return render(ast);
 };
 
 export { genDiff as default };

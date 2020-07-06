@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 const render = (arr) => {
   const reducer = (acc, item) => {
     const {
@@ -12,18 +10,16 @@ const render = (arr) => {
     if (children.length !== 0) {
       return { ...acc, [`  ${key}`]: render(children) };
     }
-    switch (status) {
-      case 'deleted':
-        return { ...acc, [`- ${key}`]: prevValue };
-      case 'added':
-        return { ...acc, [`+ ${key}`]: newValue };
-      case 'changed':
-        return { ...acc, [`- ${key}`]: prevValue, [`+ ${key}`]: newValue };
-      case 'unchanged':
-        return { ...acc, [`  ${key}`]: newValue };
-      default:
-        // nothing
+    if (status === 'deleted') {
+      return { ...acc, [`- ${key}`]: prevValue };
     }
+    if (status === 'added') {
+      return { ...acc, [`+ ${key}`]: newValue };
+    }
+    if (status === 'changed') {
+      return { ...acc, [`- ${key}`]: prevValue, [`+ ${key}`]: newValue };
+    }
+    return { ...acc, [`  ${key}`]: newValue };
   };
   return arr.reduce(reducer, {});
 };

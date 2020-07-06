@@ -1,18 +1,17 @@
 import _ from 'lodash';
 
 const renderNode = (node, keys) => {
-  let {
+  const {
     key,
     prevValue,
-    newValue,
     status,
     children,
   } = node;
   let newLine;
+  const newValue = _.isObject(node.newValue) ? '[complex value]' : node.newValue;
   if (children.length !== 0) {
     return children.map((item) => renderNode(item, [...keys, key])).join('');
   }
-  newValue = _.isObject(newValue) ? '[complex value]' : newValue;
   switch (status) {
     case 'deleted':
       newLine = `Property '${[...keys, key].join('.')}' was removed\n`;

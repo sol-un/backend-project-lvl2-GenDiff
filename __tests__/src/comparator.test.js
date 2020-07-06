@@ -44,8 +44,8 @@ test('Gendiff INI', () => {
   const pathTobefore = path.resolve(currentDir, '__fixtures__', 'ini', 'before.ini');
   const pathToafter = path.resolve(currentDir, '__fixtures__', 'ini', 'after.ini');
 
-  const pathToExpectedJson = path.resolve(currentDir, '__fixtures__', 'expected', 'json.txt');
-  const expectedJson = fs.readFileSync(pathToExpectedJson, 'utf8');
+  // const pathToExpectedJson = path.resolve(currentDir, '__fixtures__', 'expected', 'json.txt');
+  // const expectedJson = fs.readFileSync(pathToExpectedJson, 'utf8');
   const pathToExpectedPlain = path.resolve(currentDir, '__fixtures__', 'expected', 'plain.txt');
   const expectedPlain = fs.readFileSync(pathToExpectedPlain, 'utf8');
   const pathToExpectedStylish = path.resolve(currentDir, '__fixtures__', 'expected', 'stylish.txt');
