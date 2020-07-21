@@ -5,26 +5,25 @@ const build = (oldData, newData) => {
   const reducer = (acc, key) => {
     const oldValue = oldData[key];
     const newValue = newData[key];
-    let status;
-    if (newValue === undefined) {
-      status = 'deleted';
+    const node = {};
+    node.name = key;
+    if (_.isObject(oldValue) && _.isObject(newValue)) {
+      node.type = 'nested';
+      node.children = build(oldValue, newValue);
+    } else if (newValue === undefined) {
+      node.type = 'deleted';
+      node.value = oldValue;
     } else if (oldValue === undefined) {
-      status = 'added';
+      node.type = 'added';
+      node.value = newValue;
     } else if (oldValue !== newValue) {
-      status = 'changed';
+      node.type = 'changed';
+      node.newValue = newValue;
+      node.oldValue = oldValue;
     } else {
-      status = 'unchanged';
+      node.type = 'unchanged';
+      node.value = newValue;
     }
-    const children = (_.isObject(oldValue) && _.isObject(newValue))
-      ? build(oldValue, newValue)
-      : [];
-    const node = {
-      key,
-      oldValue,
-      newValue,
-      status,
-      children,
-    };
     return [...acc, node];
   };
   return keys.reduce(reducer, []);

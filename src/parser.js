@@ -1,16 +1,11 @@
-import fs from 'fs';
-import path from 'path';
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const parse = (filepath) => {
-  const data = fs.readFileSync(filepath.toString(), 'utf8');
-  const format = path.extname(filepath);
-
-  switch (format) {
+const parse = (data, extenstion) => {
+  switch (extenstion) {
     case '.json':
       return JSON.parse(data);
-    case '.yml':
+    case '.yml' || '.yaml':
       return yaml.safeLoad(data);
     case '.ini':
       return ini.parse(data);

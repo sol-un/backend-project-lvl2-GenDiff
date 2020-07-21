@@ -39,6 +39,6 @@ test('Gendiff INI', () => {
   const pathToAfter = getFixturePath('after.ini');
 
   expect(genDiff(pathToBefore, pathToAfter, 'stylish')).toBe(expectedStylish);
-  // expect(genDiff(pathToBefore, pathToAfter, 'json')).toBe(expectedJson);
+  expect(genDiff(pathToBefore, pathToAfter, 'json')).toBe(expectedJson);
   expect(genDiff(pathToBefore, pathToAfter, 'plain')).toBe(expectedPlain);
 });

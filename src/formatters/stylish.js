@@ -4,21 +4,23 @@ const renderObjectValue = (value, depth) => {
   if (!(value instanceof Object)) {
     return value;
   }
-  return `${Object.entries(value).map(([entryKey, entryValue]) => `{\n${indent(depth + 3)}${entryKey}: ${entryValue}\n${indent(depth + 1)}}`)}`;
+  return `${Object.entries(value)
+    .map(([entryKey, entryValue]) => `{\n${indent(depth + 1)}  ${entryKey}: ${entryValue}\n${indent(depth)}}`)}`;
 };
 
-const nodeActions = {
-  added: (item, depth) => `${indent(depth)}+ ${item.key}: ${renderObjectValue(item.newValue, depth)}\n`,
-  deleted: (item, depth) => `${indent(depth)}- ${item.key}: ${renderObjectValue(item.oldValue, depth)}\n`,
-  changed: (item, depth) => `${indent(depth)}- ${item.key}: ${renderObjectValue(item.oldValue, depth)}\n${indent(depth)}+ ${item.key}: ${renderObjectValue(item.newValue, depth)}\n`,
-  unchanged: (item, depth) => `${indent(depth)}  ${item.key}: ${renderObjectValue(item.newValue, depth)}\n`,
+const renderNodeByType = {
+  nested: (node, depth, process) => `${indent(depth + 1)}${node.name}: {\n${process(node.children, depth + 2).join('')}${indent(depth + 1)}}\n`,
+  added: (node, depth) => `${indent(depth)}+ ${node.name}: ${renderObjectValue(node.value, depth + 1)}\n`,
+  deleted: (node, depth) => `${indent(depth)}- ${node.name}: ${renderObjectValue(node.value, depth + 1)}\n`,
+  changed: (node, depth) => {
+    const deletedLine = `${indent(depth)}- ${node.name}: ${renderObjectValue(node.oldValue, depth + 1)}\n`;
+    const addedLine = `${indent(depth)}+ ${node.name}: ${renderObjectValue(node.newValue, depth + 1)}\n`;
+    return `${deletedLine}${addedLine}`;
+  },
+  unchanged: (node, depth) => `${indent(depth)}  ${node.name}: ${renderObjectValue(node.value, depth + 1)}\n`,
 };
-
-const renderNode = (item, depth) => {
-  if (item.children.length === 0) {
-    return nodeActions[item.status](item, depth);
-  }
-  return `${indent(depth + 1)}${item.key}: {\n${item.children.map((child) => renderNode(child, depth + 2)).join('')}${indent(depth + 1)}}\n`;
+export default (ast) => {
+  const render = (tree, depth) => tree
+    .map((node) => renderNodeByType[node.type](node, depth, render));
+  return `{\n${render(ast, 1).join('')}}\n`;
 };
-
-export default (ast) => `{\n${ast.map((item) => renderNode(item, 1)).join('')}}\n`;

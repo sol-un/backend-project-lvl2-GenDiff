@@ -8,18 +8,16 @@ const renderValueByType = (value) => {
   return value;
 };
 
-const nodeActions = {
-  added: (item, keys) => `Property '${keys.join('.')}' was added with value: ${renderValueByType(item.newValue)}\n`,
-  deleted: (item, keys) => `Property '${keys.join('.')}' was removed\n`,
-  changed: (item, keys) => `Property '${keys.join('.')}' was updated. From ${renderValueByType(item.oldValue)} to ${renderValueByType(item.newValue)}\n`,
+const renderNodeByType = {
+  nested: (node, names, process) => process(node.children, [...names, node.name]).join(''),
+  added: (node, names) => `Property '${names.concat(node.name).join('.')}' was added with value: ${renderValueByType(node.value)}\n`,
+  deleted: (node, names) => `Property '${names.concat(node.name).join('.')}' was removed\n`,
+  changed: (node, names) => `Property '${names.concat(node.name).join('.')}' was updated. From ${renderValueByType(node.oldValue)} to ${renderValueByType(node.newValue)}\n`,
   unchanged: () => '',
 };
 
-const renderNode = (node, keys) => {
-  if (node.children.length === 0) {
-    return nodeActions[node.status](node, keys);
-  }
-  return node.children.map((child) => renderNode(child, [...keys, child.key])).join('');
+export default (ast) => {
+  const render = (tree, names) => tree
+    .map((node) => renderNodeByType[node.type](node, names, render));
+  return render(ast, []).join('');
 };
-
-export default (ast) => ast.map((node) => renderNode(node, [node.key])).join('');
