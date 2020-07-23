@@ -2,31 +2,42 @@ import _ from 'lodash';
 
 const build = (oldData, newData) => {
   const keys = _.union(_.keys(oldData), _.keys(newData)).sort();
-  const reducer = (acc, key) => {
+  const mapKeyToNode = (key) => {
     const oldValue = oldData[key];
     const newValue = newData[key];
-    const node = {};
-    node.name = key;
     if (_.isObject(oldValue) && _.isObject(newValue)) {
-      node.type = 'nested';
-      node.children = build(oldValue, newValue);
-    } else if (newValue === undefined) {
-      node.type = 'deleted';
-      node.value = oldValue;
-    } else if (oldValue === undefined) {
-      node.type = 'added';
-      node.value = newValue;
-    } else if (oldValue !== newValue) {
-      node.type = 'changed';
-      node.newValue = newValue;
-      node.oldValue = oldValue;
-    } else {
-      node.type = 'unchanged';
-      node.value = newValue;
+      return {
+        name: key,
+        type: 'nested',
+        children: build(oldValue, newValue),
+      };
+    } if (newValue === undefined) {
+      return {
+        name: key,
+        type: 'deleted',
+        value: oldValue,
+      };
+    } if (oldValue === undefined) {
+      return {
+        name: key,
+        type: 'added',
+        value: newValue,
+      };
+    } if (oldValue !== newValue) {
+      return {
+        name: key,
+        type: 'changed',
+        newValue,
+        oldValue,
+      };
     }
-    return [...acc, node];
+    return {
+      name: key,
+      type: 'unchanged',
+      value: newValue,
+    };
   };
-  return keys.reduce(reducer, []);
+  return keys.map(mapKeyToNode);
 };
 
 export { build as default };

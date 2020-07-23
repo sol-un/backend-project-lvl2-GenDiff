@@ -1,16 +1,30 @@
+import _ from 'lodash';
 import yaml from 'js-yaml';
 import ini from 'ini';
 
 const parse = (data, extenstion) => {
   switch (extenstion) {
-    case '.json':
+    case '.json': {
       return JSON.parse(data);
-    case '.yml' || '.yaml':
+    }
+    case '.yml' || '.yaml': {
       return yaml.safeLoad(data);
-    case '.ini':
-      return ini.parse(data);
-    default:
+    }
+    case '.ini': {
+      const parsed = ini.parse(data);
+      const replaceStringWithInt = (value) => {
+        if (!(value instanceof Object)) {
+          return (/^-?\d+(.d+)?/.test(value))
+            ? parseInt(value, 10)
+            : value;
+        }
+        return _.mapValues(value, replaceStringWithInt);
+      };
+      return _.mapValues(parsed, replaceStringWithInt);
+    }
+    default: {
       throw new Error('Invalid file format!');
+    }
   }
 };
 
