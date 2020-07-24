@@ -1,36 +1,36 @@
 const indent = (depth) => '  '.repeat(depth);
 
+const renderLine = (node, depth, prefix, fn) => `${indent(depth)}${prefix}${node.name}: ${fn(node.children || node.value, depth + 1)}`;
+
 const renderValue = (value, depth) => {
   if (!(value instanceof Object)) {
     return value;
   }
   const reducer = (acc, [entryKey, entryValue]) => {
     const processedEntryValue = (entryValue instanceof Object)
-      ? renderValue(entryValue, depth + 2)
+      ? renderValue(entryValue, depth + 1)
       : entryValue;
-    return `${acc}${indent(2)}${entryKey}: ${processedEntryValue}\n${indent(depth)}`;
+    return `${acc}  ${renderLine({ name: entryKey, value: processedEntryValue }, depth, '  ', renderValue)}\n${indent(depth)}`;
   };
-  return `{\n${indent(depth)}${Object.entries(value).reduce(reducer, '')}}`;
+  return `{\n${Object.entries(value).reduce(reducer, '')}}`;
 };
 
-const renderLine = (node, depth, prefix) => `${indent(depth)}${prefix}${node.name}: ${renderValue(node.value, depth + 1)}\n`;
-
 const renderFunctions = {
-  nested: (node, depth, render) => `${indent(depth + 1)}${node.name}: ${render(node.children, depth + 1)}`,
-  added: (node, depth) => renderLine(node, depth, '+ '),
-  deleted: (node, depth) => renderLine(node, depth, '- '),
+  nested: (node, depth, render) => renderLine(node, depth, '  ', render),
+  added: (node, depth) => renderLine(node, depth, '+ ', renderValue),
+  deleted: (node, depth) => renderLine(node, depth, '- ', renderValue),
   changed: (node, depth) => {
-    const deletedLine = renderLine({ name: node.name, value: node.oldValue }, depth, '- ');
-    const addedLine = renderLine({ name: node.name, value: node.newValue }, depth, '+ ');
-    return `${deletedLine}${addedLine}`;
+    const deletedLine = renderLine({ name: node.name, value: node.oldValue }, depth, '- ', renderValue);
+    const addedLine = renderLine({ name: node.name, value: node.newValue }, depth, '+ ', renderValue);
+    return `${deletedLine}\n${addedLine}`;
   },
-  unchanged: (node, depth) => renderLine(node, depth, '  '),
+  unchanged: (node, depth) => renderLine(node, depth, '  ', renderValue),
 };
 export default (ast) => {
   const render = (tree, depth = 0) => {
     const renderedNodes = tree
-      .reduce((acc, node) => `${acc}${renderFunctions[node.type](node, depth + 1, render)}`, '');
-    return `{\n${renderedNodes}${indent(depth)}}\n`;
+      .reduce((acc, node) => `${acc}${renderFunctions[node.type](node, depth + 1, render)}\n`, '');
+    return `{\n${renderedNodes}${indent(depth)}}`;
   };
   return render(ast);
 };
