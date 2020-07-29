@@ -14,9 +14,7 @@ const parse = (data, extenstion) => {
       const parsed = ini.parse(data);
       const extractNumFromString = (value) => {
         if (!(value instanceof Object)) {
-          return (/^-?\d+(\.\d+)?/.test(value))
-            ? parseFloat(value, 10)
-            : value;
+          return parseFloat(value, 10) || value;
         }
         return _.mapValues(value, extractNumFromString);
       };

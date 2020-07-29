@@ -11,9 +11,9 @@ let expectedPlain;
 let expectedStylish;
 
 beforeAll(() => {
-  expectedJson = readFile('expected_json.txt').trimRight();
-  expectedPlain = readFile('expected_plain.txt').trimRight();
-  expectedStylish = readFile('expected_stylish.txt').trimRight();
+  expectedJson = readFile('expected_json.txt');
+  expectedPlain = readFile('expected_plain.txt');
+  expectedStylish = readFile('expected_stylish.txt');
 });
 
 test('Gendiff JSON', () => {

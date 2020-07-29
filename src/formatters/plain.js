@@ -25,5 +25,5 @@ const renderFunctions = {
 export default (ast) => {
   const render = (tree, parentNames = []) => tree
     .reduce((acc, node) => `${acc}${renderFunctions[node.type](node, parentNames, render)}`, '');
-  return render(ast).trimRight();
+  return render(ast);
 };
