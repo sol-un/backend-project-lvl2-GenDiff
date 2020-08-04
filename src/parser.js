@@ -2,7 +2,7 @@ import _ from 'lodash';
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const parse = (data, extenstion) => {
+export default (data, extenstion) => {
   switch (extenstion) {
     case '.json': {
       return JSON.parse(data);
@@ -25,5 +25,3 @@ const parse = (data, extenstion) => {
     }
   }
 };
-
-export { parse as default };

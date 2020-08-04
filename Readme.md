@@ -13,6 +13,7 @@ _Gendiff_  is a CLI utility that accepts two configuration files in _json_, _yml
 `npm install -g backend-project-lvl2`
 
 #### Usage
+
 ```
 gendiff [options] <filepath1> <filepath2> [format]
 
@@ -20,3 +21,9 @@ Options:
   -V, --version        output the version number
   -f, --format [type]  output format: stylish, plain, or json (default: "stylish")
   -h, --help           output usage information
+
+```
+
+#### Demo
+
+[![asciicast](https://asciinema.org/a/EcKnfqP7CgM4m6gwuOW32VuZA.svg)](https://asciinema.org/a/EcKnfqP7CgM4m6gwuOW32VuZA)

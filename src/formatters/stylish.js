@@ -6,8 +6,8 @@ const renderValue = (value, depth) => {
   if (!(value instanceof Object)) {
     return value;
   }
-  const fn = ([entryKey, entryValue]) => `${renderLine(depth, '      ', entryKey, renderValue(entryValue, depth + 1))}\n`;
-  return `{\n${Object.entries(value).map(fn).join('')}${indent(depth + 1)}}`;
+  const fn = ([entryKey, entryValue]) => `${renderLine(depth, '      ', entryKey, renderValue(entryValue, depth + 1))}`;
+  return `{\n${Object.entries(value).map(fn).join('\n')}\n${indent(depth + 1)}}`;
 };
 
 const renderFunctions = {
@@ -24,8 +24,9 @@ const renderFunctions = {
 export default (ast) => {
   const render = (tree, depth = 0) => {
     const renderedNodes = tree
-      .reduce((acc, node) => `${acc}${renderFunctions[node.type](node, depth + 1, render)}\n`, '');
-    return `{\n${renderedNodes}${indent(depth)}}`;
+      .flatMap((node) => renderFunctions[node.type](node, depth + 1, render))
+      .join('\n');
+    return `{\n${renderedNodes}\n${indent(depth)}}`;
   };
   return `${render(ast)}\n`;
 };
