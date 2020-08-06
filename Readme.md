@@ -6,7 +6,7 @@
 
 #### Description
 
-_Gendiff_  is a CLI utility that accepts two configuration files in _json_, _yml_, or _ini_  format and shows changes between them. The output can be formatted in either visual or verbose style, as well as converted to _json_ for interfacing with other applications.
+_Gendiff_  is a CLI utility that accepts two configuration files in _json_, _yml_, or _ini_  format and shows changes between them. The output can be formatted in either visual or verbose style, as well as converted to _json_ for interfacing with other apps.
 
 #### Installation
 
