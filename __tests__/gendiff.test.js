@@ -42,3 +42,12 @@ test('Gendiff INI', () => {
   expect(JSON.parse(genDiff(pathToBefore, pathToAfter, 'json'))).toStrictEqual(expectedJson);
   expect(genDiff(pathToBefore, pathToAfter, 'plain')).toBe(expectedPlain);
 });
+
+test('Gendiff different formats', () => {
+  const pathToBefore = getFixturePath('before.yml');
+  const pathToAfter = getFixturePath('after.ini');
+
+  expect(genDiff(pathToBefore, pathToAfter, 'stylish')).toBe(expectedStylish);
+  expect(JSON.parse(genDiff(pathToBefore, pathToAfter, 'json'))).toStrictEqual(expectedJson);
+  expect(genDiff(pathToBefore, pathToAfter, 'plain')).toBe(expectedPlain);
+});

@@ -6,8 +6,10 @@ const renderValue = (value, depth) => {
   if (!(value instanceof Object)) {
     return value;
   }
-  const fn = ([entryKey, entryValue]) => `${renderLine(depth, '      ', entryKey, renderValue(entryValue, depth + 1))}`;
-  return `{\n${Object.entries(value).map(fn).join('\n')}\n${indent(depth + 1)}}`;
+  const fn = ([entryKey, entryValue]) => renderLine(depth, '      ', entryKey, renderValue(entryValue, depth + 1));
+  return `{\n${Object.entries(value)
+    .map(fn)
+    .join('\n')}\n${indent(depth + 1)}}`;
 };
 
 const renderFunctions = {
